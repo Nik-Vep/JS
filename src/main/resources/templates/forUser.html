@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+
+<h2>User Profile</h2>
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Department</th>
+        <th>Salary</th>
+    </tr>
+    <tr th:object="${currentUser}">
+        <td th:text="${currentUser.username}"></td>
+        <td th:text="${currentUser.surname}"></td>
+        <td th:text="${currentUser.department}"></td>
+        <td th:text="${currentUser.salary}"></td>
+    </tr>
+</table>
+
+<h2>Logout</h2>
+<a th:href="@{/logout}">Logout</a>
+
+</body>
+</html>
