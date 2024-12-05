@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDAO;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,13 +22,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private UserDAO userDAO;
-    PasswordEncoder bCryptPasswordEncoder;
+    private final UserDAO userDAO;
+    private final RoleService roleService;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    public UserServiceImpl(UserDAO userDAO, @Lazy PasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserDAO userDAO, RoleService roleService, @Lazy PasswordEncoder bCryptPasswordEncoder) {
         this.userDAO = userDAO;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -36,11 +39,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public void add(User user) {
+    public void add(User user, List<Long> rolesId) {
         User userFromDB = userDAO.getByName(user.getUsername());
         if (userFromDB != null) {
             throw new IllegalArgumentException("Пользователь с таким именем уже существует");
         }
+
+        List<Role> roles = new ArrayList<>();
+        for (Long id : rolesId) {
+            Role role = roleService.getById(id);
+            roles.add(role);
+        }
+        user.setRoles(roles);
+
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userDAO.add(user);
@@ -54,7 +65,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public void edit(User user) {
+    public void edit(User user, List <Long> rolesId) {
+        List<Role> roles = new ArrayList<>();
+        for (Long Id : rolesId) {
+            Role role = roleService.getById(Id);
+            roles.add(role);
+        }
+        user.setRoles(roles);
+
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
             user.setPassword(encodedPassword);

@@ -6,15 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDAO;
 import ru.kata.spring.boot_security.demo.model.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class RoleServiceImpl implements RoleService{
 
-    private RoleDAO roleDAO;
+    private final RoleDAO roleDAO;
 
-    @Autowired
     public RoleServiceImpl(RoleDAO roleDAO) {
         this.roleDAO = roleDAO;
     }
