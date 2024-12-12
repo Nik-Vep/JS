@@ -142,7 +142,7 @@
                                                                                     <br>
                                                                                     <div class="form-group ">
                                                                                         <label><strong>Email</strong></label>
-                                                                                        <input type="text" class="form-control" id="email1" name="email" th:value="${user.email}" required />
+                                                                                        <input type="email" class="form-control" id="email1" name="email" th:value="${user.email}" required />
                                                                                     </div>
                                                                                     <br>
                                                                                     <div class="form-group ">
@@ -249,7 +249,7 @@
 
                                     <div class="row no-gutters border">
                                         <div class="col-md-12 " style="background-color: white">
-                                            <form action="#" th:action="@{/api/admin/add}" th:object="${user}" method="post">
+                                            <form action="#" th:action="@{/api/admin/add}" th:object="${userAdd}" method="post">
                                                 <div class="form-row justify-content-md-center p-3">
                                                     <div class="col-4 text-center">
                                                         <label ><strong>Name</strong></label>
@@ -265,10 +265,10 @@
                                                         <input type="text" class="form-control" id="salary"name="salary" required>
                                                         <br>
                                                         <label ><strong>Password</strong></label>
-                                                        <input type="text" class="form-control" id="password"name="password"required >
+                                                        <input type="password" class="form-control" id="password"name="password"required >
                                                         <br>
                                                         <label ><strong>Email</strong></label>
-                                                        <input type="text" class="form-control" id="email"name="email" required >
+                                                        <input type="email" class="form-control" id="email"name="email" required >
                                                         <br>
                                                         <label for="roles"><strong>Role</strong></label>
                                                         <select multiple class="form-control" id="roles"  name="rolesId" required>

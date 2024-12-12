@@ -70,13 +70,13 @@ public class AdminController {
     public ModelAndView addPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users");
-        modelAndView.addObject("user", new User());
+        modelAndView.addObject("userAdd", new User());
         modelAndView.addObject("allRoles", roleService.allRoles());
         return modelAndView;
     }
 
     @PostMapping("/add")
-    public ModelAndView addUser(@ModelAttribute("user") User user,
+    public ModelAndView addUser(@ModelAttribute("userAdd") User user,
                                 @RequestParam List<Long> rolesId) {
         ModelAndView modelAndView = new ModelAndView();
         userService.add(user, rolesId);

@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void add(User user, List<Long> rolesId) {
-        User userFromDB = userDAO.getByName(user.getUsername());
+        User userFromDB = userDAO.getByEmail(user.getEmail());
         if (userFromDB != null) {
-            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
+            throw new IllegalArgumentException("Пользователь с таким email уже существует");
         }
 
         List<Role> roles = new ArrayList<>();
@@ -65,6 +65,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     @Transactional
     public void edit(User user, List <Long> rolesId) {
+
         List<Role> roles = new ArrayList<>();
         for (Long Id : rolesId) {
             roles.add(roleService.getById(Id));
