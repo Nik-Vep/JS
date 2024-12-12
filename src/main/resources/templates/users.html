@@ -94,10 +94,10 @@
                                                         </td>
                                                         <td th:text="${user.email}"></td>
                                                         <td>
-                                                            <a th:href="@{/admin/edit}" class="btn btn-info eBtn" data-toggle="modal" th:data-target="'#editModal_' + ${user.id}" th:data-userid="${user.id}">Edit</a>
+                                                            <a th:href="@{/api/admin/edit}" class="btn btn-info eBtn" data-toggle="modal" th:data-target="'#editModal_' + ${user.id}" th:data-userid="${user.id}">Edit</a>
                                                         </td>
                                                         <td>
-                                                            <a th:href="@{/admin/delete}" class="btn btn-danger delBtn" data-toggle="modal" th:data-target="'#deleteModal_' + ${user.id}" th:data-userid="${user.id}">Delete</a>
+                                                            <a th:href="@{/api/admin/delete}" class="btn btn-danger delBtn" data-toggle="modal" th:data-target="'#deleteModal_' + ${user.id}" th:data-userid="${user.id}">Delete</a>
                                                         </td>
 
 
@@ -111,7 +111,7 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form action="#" method="post" th:action="@{/admin/edit/}" th:object="${user}">
+                                                                        <form action="#" method="post" th:action="@{/api/admin/edit/}" th:object="${user}">
                                                                             <input type="hidden" name="id" th:value="${user.id}" />
                                                                             <div class="form-row justify-content-md-center">
                                                                                 <div class="col-8 text-center">
@@ -177,7 +177,7 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form action="#" method="post" th:action="@{/admin/delete/}" th:object="${user}">
+                                                                        <form action="#" method="post" th:action="@{/api/admin/delete/}" th:object="${user}">
                                                                             <input type="hidden" name="id" th:value="${user.id}" />
                                                                             <div class="form-row justify-content-md-center">
                                                                                 <div class="col-8 text-center">
@@ -249,7 +249,7 @@
 
                                     <div class="row no-gutters border">
                                         <div class="col-md-12 " style="background-color: white">
-                                            <form action="#" th:action="@{/admin/add}" th:object="${user}" method="post">
+                                            <form action="#" th:action="@{/api/admin/add}" th:object="${user}" method="post">
                                                 <div class="form-row justify-content-md-center p-3">
                                                     <div class="col-4 text-center">
                                                         <label ><strong>Name</strong></label>

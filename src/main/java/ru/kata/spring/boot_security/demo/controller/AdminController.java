@@ -18,6 +18,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.util.List;
 
 @Controller
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -29,7 +30,7 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/admin/")
+    @GetMapping("/")
     public ModelAndView allUsers() {
         List<User> users = userService.allUsers();
         ModelAndView modelAndView = new ModelAndView();
@@ -44,11 +45,10 @@ public class AdminController {
         return modelAndView;
     }
 
-    @GetMapping("/admin/edit")
+    @GetMapping("/edit")
     public ModelAndView editPage(@RequestParam("id") Long id) {
         User user = userService.getById(id);
         List<Role> allRoles = roleService.allRoles();
-        System.out.println("Available roles: " + allRoles);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users");
@@ -57,16 +57,16 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/admin/edit")
+    @PostMapping("/edit")
     public ModelAndView editUser(@ModelAttribute("user") User user,
                                  @RequestParam List<Long> rolesId) {
         ModelAndView modelAndView = new ModelAndView();
         userService.edit(user, rolesId);
-        modelAndView.setViewName("redirect:/admin/");
+        modelAndView.setViewName("redirect:/api/admin/");
         return modelAndView;
     }
 
-    @GetMapping("/admin/add")
+    @GetMapping("/add")
     public ModelAndView addPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users");
@@ -75,21 +75,20 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/add")
     public ModelAndView addUser(@ModelAttribute("user") User user,
                                 @RequestParam List<Long> rolesId) {
         ModelAndView modelAndView = new ModelAndView();
         userService.add(user, rolesId);
-        modelAndView.setViewName("redirect:/admin/");
+        modelAndView.setViewName("redirect:/api/admin/");
         return modelAndView;
     }
 
-    @PostMapping("/admin/delete")
+    @PostMapping("/delete")
     public ModelAndView deleteUser(@RequestParam("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/admin/");
-        User user = userService.getById(id);
-        userService.delete(user);
+        modelAndView.setViewName("redirect:/api/admin/");
+        userService.delete(userService.getById(id));
         return modelAndView;
     }
 

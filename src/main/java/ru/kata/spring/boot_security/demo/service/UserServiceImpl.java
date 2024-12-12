@@ -47,8 +47,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         List<Role> roles = new ArrayList<>();
         for (Long id : rolesId) {
-            Role role = roleService.getById(id);
-            roles.add(role);
+            roles.add(roleService.getById(id));
         }
         user.setRoles(roles);
 
@@ -68,8 +67,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void edit(User user, List <Long> rolesId) {
         List<Role> roles = new ArrayList<>();
         for (Long Id : rolesId) {
-            Role role = roleService.getById(Id);
-            roles.add(role);
+            roles.add(roleService.getById(Id));
         }
         user.setRoles(roles);
 
