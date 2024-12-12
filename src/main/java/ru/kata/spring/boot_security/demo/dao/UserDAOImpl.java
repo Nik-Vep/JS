@@ -53,4 +53,16 @@ public class UserDAOImpl implements UserDAO{
             return null;
         }
     }
+
+    @Override
+    public User getByEmail(String email) {
+        try {
+            return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }

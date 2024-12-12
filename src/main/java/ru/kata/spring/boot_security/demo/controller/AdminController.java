@@ -1,19 +1,20 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,6 +22,7 @@ public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
+
 
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
@@ -32,7 +34,13 @@ public class AdminController {
         List<User> users = userService.allUsers();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users");
-        modelAndView.addObject("userList",users);
+        modelAndView.addObject("userList", users);
+
+        User currentUser = userService.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        modelAndView.setViewName("users");
+        modelAndView.addObject("currentUser", currentUser);
+        modelAndView.addObject("allRoles", roleService.allRoles());
+
         return modelAndView;
     }
 
@@ -40,9 +48,11 @@ public class AdminController {
     public ModelAndView editPage(@RequestParam("id") Long id) {
         User user = userService.getById(id);
         List<Role> allRoles = roleService.allRoles();
+        System.out.println("Available roles: " + allRoles);
+
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("form");
-        modelAndView.addObject("user",user);
+        modelAndView.setViewName("users");
+        modelAndView.addObject("user", user);
         modelAndView.addObject("allRoles", allRoles);
         return modelAndView;
     }
@@ -59,7 +69,7 @@ public class AdminController {
     @GetMapping("/admin/add")
     public ModelAndView addPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("form");
+        modelAndView.setViewName("users");
         modelAndView.addObject("user", new User());
         modelAndView.addObject("allRoles", roleService.allRoles());
         return modelAndView;
@@ -69,18 +79,24 @@ public class AdminController {
     public ModelAndView addUser(@ModelAttribute("user") User user,
                                 @RequestParam List<Long> rolesId) {
         ModelAndView modelAndView = new ModelAndView();
-        userService.add(user,rolesId);
+        userService.add(user, rolesId);
         modelAndView.setViewName("redirect:/admin/");
         return modelAndView;
     }
 
-    @GetMapping("/admin/delete")
+    @PostMapping("/admin/delete")
     public ModelAndView deleteUser(@RequestParam("id") Long id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/");
         User user = userService.getById(id);
         userService.delete(user);
         return modelAndView;
+    }
+
+    @GetMapping("/getOne")
+    @ResponseBody
+    public User getOne(Long id) {
+        return userService.getById(id);
     }
 }
 

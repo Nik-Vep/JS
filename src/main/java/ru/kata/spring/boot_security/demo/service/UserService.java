@@ -10,4 +10,5 @@ public interface UserService {
     void edit(User user, List<Long> rolesId);
     User getById(Long id);
     User getByName(String name);
+    User getByEmail(String email);
 }
