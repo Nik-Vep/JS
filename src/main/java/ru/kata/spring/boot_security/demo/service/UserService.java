@@ -9,6 +9,6 @@ public interface UserService {
     void delete(User user);
     void edit(User user, List<Long> rolesId);
     User getById(Long id);
-    User getByName(String name);
     User getByEmail(String email);
+
 }

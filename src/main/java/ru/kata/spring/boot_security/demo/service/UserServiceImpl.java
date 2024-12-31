@@ -66,27 +66,34 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public void edit(User user, List <Long> rolesId) {
 
-        List<Role> roles = new ArrayList<>();
-        for (Long Id : rolesId) {
-            roles.add(roleService.getById(Id));
+        User existingUser = userDAO.getById(user.getId());
+        if (existingUser == null) {
+            throw new IllegalArgumentException("Пользователь не найден");
         }
-        user.setRoles(roles);
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setSurname(user.getSurname());
+        existingUser.setDepartment(user.getDepartment());
+        existingUser.setSalary(user.getSalary());
+        existingUser.setEmail(user.getEmail());
+
+        List<Role> roles = new ArrayList<>();
+        for (Long id : rolesId) {
+            roles.add(roleService.getById(id));
+        }
+        existingUser.setRoles(roles);
 
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
+            existingUser.setPassword(encodedPassword);
         }
-        userDAO.edit(user);
+
+        userDAO.edit(existingUser);
     }
 
     @Override
     public User getById(Long id) {
         return userDAO.getById(id);
-    }
-
-    @Override
-    public User getByName(String name) {
-        return userDAO.getByName(name);
     }
 
     @Override
